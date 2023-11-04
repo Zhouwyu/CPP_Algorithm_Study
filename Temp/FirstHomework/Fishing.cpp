@@ -5,59 +5,39 @@
  */
 #include <iostream>
 #include <vector>
+
+#define MAX 30
+
 using namespace std;
 
-// 输入数据
-int n, h;
+int n = 2;
+int h = 1;
+int fi[MAX] = {0, 10, 1};
+int di[MAX] = {0, 2, 5};
+int ti[MAX] = {0, 2};
+int cfi[MAX];
 
-// 初始化向量
-vector<int> t(n);
-vector<int> f(n);
-vector<int> d(n);
+struct NodeType{
+    int num[MAX];
+    int max;
+} Lake[MAX];
+int maxList;
 
-// 计算当前湖最大钓鱼量
-int calculateMaxFish(int lake, int timeLeft, vector<int>& fishRate, vector<int>& decline) {
-    int maxFish = 0;
-    for(int i=0; i<timeLeft; i++) {
-        maxFish += fishRate[lake-1] - i*decline[lake-1];
-    }
-    return maxFish;
-}
-
-// 贪心算法
-int greedyFisher() {
-    int currentLake = 1, totalFish = 0;
-
-    cin >> n >> h;
-
-    for(int i=0; i<n; i++) {
-        cin >> t[i];
-    }
-
-    for(int i=0; i<n; i++) {
-        cin >> f[i];
-    }
-
-    for(int i=0; i<n; i++) {
-        cin >> d[i];
-    }
-
-    while(currentLake <= n) {
-        int maxFish = calculateMaxFish(currentLake, h, f, d);
-        totalFish += maxFish;
-
-        if(currentLake != n) {
-            totalFish -= t[currentLake-1] * d[currentLake-1];
-            currentLake++;
+int getMax(int p[], int i, int j) {
+    int maxi = i;
+    for(int k = i + 1; k <= j; k++) {
+        if(p[maxi] < p[k]) {
+            maxi = k;
         }
     }
-
-    return totalFish;
+    return maxi;
 }
 
-int main() {
-    int result = greedyFisher();
-    cout << result << endl;
-    return 0;
+void solve() {
+    int i, j, t, restT;
+    int T = 60 * h;
+    for(j = 1; j <= i; j++) {
+        cfi[]
+    }
 }
 
