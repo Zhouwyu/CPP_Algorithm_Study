@@ -1,43 +1,102 @@
 /**
- * æŸäººæƒ³åœ¨hå°æ—¶å†…é’“åˆ°æ•°é‡æœ€å¤šçš„é±¼ã€‚è¿™æ—¶ä»–å·²ç»åœ¨ä¸€æ¡è·¯è¾¹ï¼Œä»Žä»–æ‰€åœ¨çš„åœ°æ–¹å¼€å§‹ï¼Œæ”¾çœ¼æœ›åŽ»ï¼Œnä¸ªæ¹–ä¸€å­—æŽ’å¼€ï¼Œ
- * æ¹–ç¼–å·ä¾æ¬¡æ˜¯1.2â€¦nã€‚ä»–å·²ç»çŸ¥é“ï¼Œä»Žæ¹–ièµ°åˆ°æ¹–i+1éœ€è¦èŠ±5*tiåˆ†é’Ÿ;ä»–åœ¨æ¹–ié’“é±¼,ç¬¬ä¸€ä¸ª5åˆ†é’Ÿå¯é’“åˆ°æ•°é‡ä¸ºfiçš„é±¼ï¼Œ
- * è‹¥ä»–ç»§ç»­åœ¨æ¹–ié’“é±¼,æ¯è¿‡5åˆ†é’Ÿ,é’“é±¼é‡å°†å‡å°‘diã€‚è¯·ç»™ä»–è®¾è®¡ä¸€ä¸ªæœ€ä½³é’“é±¼æ–¹æ¡ˆã€‚
+ * Ä³ÈËÏëÔÚhÐ¡Ê±ÄÚµöµ½ÊýÁ¿×î¶àµÄÓã¡£ÕâÊ±ËûÒÑ¾­ÔÚÒ»ÌõÂ·±ß£¬´ÓËûËùÔÚµÄµØ·½¿ªÊ¼£¬·ÅÑÛÍûÈ¥£¬n¸öºþÒ»×ÖÅÅ¿ª£¬
+ * ºþ±àºÅÒÀ´ÎÊÇ1.2¡­n¡£ËûÒÑ¾­ÖªµÀ£¬´Óºþi×ßµ½ºþi+1ÐèÒª»¨5*ti·ÖÖÓ;ËûÔÚºþiµöÓã,µÚÒ»¸ö5·ÖÖÓ¿Éµöµ½ÊýÁ¿ÎªfiµÄÓã£¬
+ * ÈôËû¼ÌÐøÔÚºþiµöÓã,Ã¿¹ý5·ÖÖÓ,µöÓãÁ¿½«¼õÉÙdi¡£Çë¸øËûÉè¼ÆÒ»¸ö×î¼ÑµöÓã·½°¸¡£
  */
-#include <iostream>
-#include <vector>
-
-#define MAX 30
+#include<bits/stdc++.h>
 
 using namespace std;
+#define NUM 30
+// Ã¿5·ÖÖÓÎªÒ»¸öÖÜÆÚ
+// ±íÊ¾Ã¿¸öºþ³õÊ¼¿ÉµöÓãÊýÁ¿
+int fi[NUM];
+// ±íÊ¾¾­¹ýÒ»¸öÖÜÆÚºófi[i]¶ÔÓ¦ºþÀïÓã¼õÉÙµÄÊýÁ¿
+int di[NUM];
+// ±íÊ¾´Óºþiµ½ºþi+1ÐèÒªµÄÊ±¼ä
+int ti[NUM];
+// ×îÓÅµöÓã¼Æ»®
+int plan[NUM];
+// ×î¶àµÄµöÓãÊýÁ¿
+int best;
 
-int n = 2;
-int h = 1;
-int fi[MAX] = {0, 10, 1};
-int di[MAX] = {0, 2, 5};
-int ti[MAX] = {0, 2};
-int cfi[MAX];
-
-struct NodeType{
-    int num[MAX];
-    int max;
-} Lake[MAX];
-int maxList;
-
-int getMax(int p[], int i, int j) {
-    int maxi = i;
-    for(int k = i + 1; k <= j; k++) {
-        if(p[maxi] < p[k]) {
-            maxi = k;
-        }
+/**
+ * ÀûÓÃÌ°ÐÄËã·¨
+ * @param pos µÚ¼¸¸öºþ
+ * @param time Ê£ÓàµÄÊ±¼ä
+ */
+void greedy(int pos, int time) {
+    // Ã»Ê±¼äÁËÖ±½Ó½áÊø
+    if (time <= 0) return;
+    int i, j;
+    // ÓÃÓÚ´æ´¢ÔÚÃ¿¸öºþÖÐµöµ½µÄÓãµÄÊýÁ¿
+    int tempFish[NUM];
+    // ÁÙÊ±¼Æ»®Êý×é£¬±ÜÃâÓ°ÏìÔ­planÊý×éÄÚÈÝ
+    int tempPlan[NUM];
+    // ×ÜµöÓãÊý
+    int total = 0;
+    // ½«Ã¿¸öºþÖÐÓãµÄÊýÁ¿¸´ÖÆµ½ÁÙÊ±Êý×étempFishÖÐ½øÐÐ³õÊ¼»¯
+    for (i = 0; i < pos; ++i)
+        tempFish[i] = fi[i];
+    // ÔÚÊ£ÓàµÄÊ±¼äÄÚ
+    for (i = 0; i < time; ++i) {
+        int max = 0;
+        int id = -1;
+        // ÕÒµ½²¶»ñÁ¿×î´óµÄºþºÍÓã
+        for (j = 0; j < pos; ++j)
+            if (tempFish[j] > max) {
+                max = tempFish[j];
+                id = j;
+            }
+        // ¸üÐÂ¼Æ»®ºÍ×ÜÁ¿ºÍÓãÊ£ÓàµÄÊýÁ¿
+        if (id != -1) {
+            ++tempPlan[id];
+            tempFish[id] -= di[id];
+            total += max;
+        } else ++tempPlan[0];
     }
-    return maxi;
+    // Èç¹ûÄ¿Ç°µöµ½µÄÓã±ÈÄ¿Ç°×îÓÅµÄ¸üºÃ£¬¸üÐÂ×îÓÅ½â
+    if (total > best) {
+        best = total;
+        for (i = 0; i < pos; ++i)
+            plan[i] = tempPlan[i];
+    }
 }
 
-void solve() {
-    int i, j, t, restT;
-    int T = 60 * h;
-    for(j = 1; j <= i; j++) {
-        cfi[]
+/*
+ÊäÈëÊ¾Àý£º
+2 1
+10 1
+2 5
+2
+*/
+int main() {
+    int n, h;
+    cout << "ÇëÊäÈëºþÊýÓë¿ÉÓÃÐ¡Ê±Êý£¬ÒÔ¿Õ¸ñÎª¼ä¸ô£º" << endl;
+    cin >> n >> h;
+    cout << "ÇëÊäÈë³õÊ¼ÓãµÄÊýÁ¿£º" << endl;
+    for (int i = 0; i < n; i++) {
+        cin >> fi[i];
     }
+    cout << "ÇëÊäÈëÒ»¸öÖÜÆÚÓã¼õÉÙµÄÊýÁ¿£º" << endl;
+    for (int i = 0; i < n; i++) {
+        cin >> di[i];
+    }
+    cout << "ÇëÊäÈë´Óºþiµ½ºþi+1»¨·ÑµÄÊ±¼ä£¨ÒÔ·ÖÖÓÎª¼ÆÁ¿µ¥Î»£©£º" << endl;
+    for (int i = 0; i < n - 1; i++) {
+        cin >> ti[i];
+    }
+    // Ò»Ð¡Ê±60·ÖÖÓ£¬5·ÖÖÓÒ»¸öÖÜÆÚ£¬ÔòÒ»Ð¡Ê±ÓÐ12¸öÖÜÆÚ£¬ÕâÑù¼ÇÂ¼ÎªµöÒ»´ÎÓã
+    h = h * 12;
+    int time = 0;
+    // ×î¶àµöÓãÊýÁ¿³õÊ¼»¯Îª-1
+    best = -1;
+    for (int i = 1; i <= n && h - time; i++) {
+        greedy(i, h - time);
+        time += ti[i];
+    }
+    for (int i = 0; i < n - 1; i++) {
+        cout << plan[i] * 5 << endl;
+    }
+    cout << plan[n - 1] * 5 << endl;
+    cout << "×ÜµÄµöÓãÊýÁ¿:" << best << endl;
 }
-
